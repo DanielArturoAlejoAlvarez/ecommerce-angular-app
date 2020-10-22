@@ -1,0 +1,221 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 offset-md-1 mt-4">
+      <div class="card">
+        <div class="card-header">
+          <h3>{{ btnAction }} PRODUCT</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="formProduct">
+            <div class="row">
+              <div class="col-4">
+                <div class="form-group">
+                  <label for="code">CODE:</label>
+                  <input
+                    formControlName="code"
+                    name="code"
+                    type="text"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="form-group">
+                  <label for="category">CATEGORY:</label>
+                  <select
+                    formControlName="category"
+                    name="category"
+                    class="form-control"                                                                                                                                                           
+                  >                                                                         
+                    <option
+                      *ngFor="let category of categories"
+                      [ngValue]="category"
+                      [selected]="selectedCategory==category.name"
+                    >
+                      {{ category.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="form-group">
+                  <label for="name">NAME:</label>
+                  <input
+                    formControlName="name"
+                    name="name"
+                    type="text"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <label for="description">BODY:</label>
+                  <editor
+                    formControlName="description"
+                    name="description"
+                    apiKey="Get your free API key at tiny.cloud and paste it here"
+                    [init]="{
+                      icons: 'material',
+                      skin: 'borderless',
+                      plugins: 'wordcount',
+                      menubar: false,
+                      min_height: 150
+                    }"
+                  ></editor>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="excerpt">EXCERPT:</label>
+                  <input
+                    formControlName="excerpt"
+                    name="excerpt"
+                    type="text"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div
+                        *ngIf="!formProduct.value.image; else elseBlock"
+                      ></div>
+                      <ng-template #elseBlock>
+                        <img
+                          [src]="formProduct.value.image"
+                          class="img-fluid"
+                          alt=""
+                        />
+                      </ng-template>
+                    </div>
+                  </div>
+
+                  <label for="image">URL IMAGE:</label>
+                  <input
+                    formControlName="image"
+                    name="image"
+                    type="text"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="form-group">
+                  <label for="stock">STOCK:</label>
+                  <input
+                    formControlName="stock"
+                    name="stock"
+                    type="text"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="form-group">
+                  <label for="price">PRICE:</label>
+                  <input
+                    formControlName="price"
+                    name="price"
+                    type="text"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              
+              
+              <div class="col-4">
+                <div class="form-group">
+                  <label for="status">STATUS:</label>
+                  <select
+                    formControlName="status"
+                    name="status"
+                    class="form-control"
+                  >
+                    <option value="true">YES</option>
+                    <option value="false">NO</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <button
+                    (click)="edit ? updateProduct() : addProduct()"
+                    class="btn btn-block btn-lg btn-primary"
+                  >
+                    {{ btnAction }} PRODUCT
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      <div class="card">
+        <div class="card-header">
+          <h3>PRODUCTS</h3>
+        </div>
+        <div class="card-body">
+          <table
+            class="table table-bordered table-hover table-condensed table-striped"
+          >
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>CODE</th>
+                <th>CATEGORY</th>
+                <th>NAME</th>
+                <th>PRICE</th>
+                <th>STOCK</th>
+                <th>IMAGE</th>
+                <th>STATUS</th>
+                <th colspan="2">&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of products; let i = index">
+                <th>{{ i + 1 }}</th>
+                <td>{{ product.code }}</td>
+                <td><strong>{{ product.category.name | uppercase }}</strong></td>
+                <td>{{ product.name }}</td>
+                <td><strong>$/. {{ product.price }}</strong></td>
+                <td>{{ product.stock }}</td>
+                <td width="125">
+                  <img
+                    [src]="product.image"
+                    class="img-fluid"
+                    [alt]="product.name"
+                  />
+                </td>
+                <td>{{ product.status }}</td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      (click)="editProduct(product._id)"
+                      class="btn btn-warning btn-sm"
+                    >
+                      EDIT
+                    </button>
+                    <button
+                      (click)="deleteProduct(product)"
+                      class="btn btn-danger btn-sm"
+                    >
+                      DELETE
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,151 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 offset-md-1 mt-4">
+      <div class="card">
+        <div class="card-header">
+          <h3>{{ btnAction }} CLIENT</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="formClient">
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="displayName">NAME:</label>
+                  <input
+                    formControlName="displayName"
+                    name="displayName"
+                    type="text"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="email">EMAIL:</label>
+                  <input
+                    formControlName="email"
+                    name="email"
+                    type="email"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              
+              <div class="col-8">
+                <div class="form-group">
+                  <label for="address">ADDRESS:</label>
+                  <editor
+                    formControlName="address"
+                    name="address"
+                    apiKey="Get your free API key at tiny.cloud and paste it here"
+                    [init]="{
+                      icons: 'material',
+                      skin: 'borderless',
+                      plugins: 'wordcount',
+                      menubar: false,
+                      min_height: 150
+                    }"
+                  ></editor>
+                </div>
+              </div>             
+             
+              <div class="col-4">
+                <div class="row">
+                  <div class="col-12 mt-4">
+                    <div class="form-group mt-4">
+                      <label for="phone">PHONE:</label>
+                      <input
+                        formControlName="phone"
+                        name="phone"
+                        type="text"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="status">STATUS:</label>
+                      <select
+                        formControlName="status"
+                        name="status"
+                        class="form-control"
+                      >
+                        <option value="true">YES</option>
+                        <option value="false">NO</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <button
+                    (click)="edit ? updateClient() : addClient()"
+                    class="btn btn-block btn-lg btn-primary"
+                  >
+                    {{ btnAction }} CLIENT
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      <div class="card">
+        <div class="card-header">
+          <h3>CLIENTS</h3>
+        </div>
+        <div class="card-body">
+          <table
+            class="table table-bordered table-hover table-condensed table-striped"
+          >
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>PHONE</th>
+                <th>ADDRESS</th>
+                <th>STATUS</th>
+                <th colspan="2">&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let client of clients; let i = index">
+                <th>{{ i + 1 }}</th>
+                <td>{{ client.displayName }}</td>
+                <td>{{ client.email }}</td>
+                <td>{{ client.phone }}</td>
+                <td>{{ client.address }}</td>                
+                <td>{{ client.status }}</td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      (click)="editClient(client._id)"
+                      class="btn btn-warning btn-sm"
+                    >
+                      EDIT
+                    </button>
+                    <button
+                      (click)="deleteClient(client)"
+                      class="btn btn-danger btn-sm"
+                    >
+                      DELETE
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

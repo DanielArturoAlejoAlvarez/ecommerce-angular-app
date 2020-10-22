@@ -1,140 +1,18 @@
-# ECOMMERCE ANGULAR APP
-
-## Description
-
-This repository is a Software of Application with Angular.
-
-## Installation
-
-Using Angular 10 preferably.
-
-## REST API (example)
-
-https://github.com/DanielArturoAlejoAlvarez/ecommerce-rest-api-node
-
-## Usage
-
-```html
-$ git clone https://github.com/DanielArturoAlejoAlvarez/ecommerce-angular-app.git
-[NAME APP]
-
-$ yarn install
-
-$ ng serve
-
-```
-
-Follow the following steps and you're good to go! Important:
-
-![alt text](https://www.belatrixsf.com/blog/wp-content/uploads/2017/11/image3.gif)
-
-## Coding
-
-### Config 
-
-```ts
-...
-export class AuthComponent implements OnInit {
-  formAuth: FormGroup;
-
-  constructor(
-    private _toastr: ToastrService,
-    private _fb: FormBuilder,
-    private _auth: AuthService,
-    private _router: Router
-  ) {
-    this.formAuth = this._fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-    });
-  }
-
-  ngOnInit(): void {}
-
-  login() {
-    this._auth.login(this.formAuth.value).subscribe((data) => {
-      if (data.ok) {
-        localStorage.setItem('token', data.token);
-        this._toastr.success('You are now logged in!', 'SUCCESS')
-        this._router.navigate(['user']);
-      }else {
-        //alert(data.msg)
-        this._toastr.error(data.msg, 'ERROR')
-      }
-    },err=>{
-      //alert(err.error.msg)
-      this._toastr.error(err.error.msg, 'ERROR')
-    });
-  }
-}
-...
-```
-
-### Guards
-```ts
-...
-export class AuthGuard implements CanActivate {
-
-  constructor(private _as: AuthService, private _router: Router) {}
-
-  canActivate(): boolean {
-    if (this._as.loggedIn()) {
-      return true
-    }else {
-      this._router.navigate(['login'])
-      return false
-    }
-  }
-  
-}
-...
-```
-
-### Services
-
-```ts
-...
-export class OrderService {
-
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Authorization': localStorage.getItem('token')
-    })
-  }
-
-  constructor(private _http: HttpClient) { }
+import { Component, OnInit } from '@angular/core';
+import { OrderService } from 'src/app/services/order.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ClientService } from 'src/app/services/client.service';
+import { ProductService } from 'src/app/services/product.service';
 
 
-  API_URI = 'http://127.0.0.1:3000/api/v1'
 
-  getOrders(): Observable<any> {
-    return this._http.get<Order[]>(`${this.API_URI}/orders`, this.httpOptions)
-  }
-
-  getOrder(id: number|string): Observable<any> {
-    return this._http.get<Order>(`${this.API_URI}/orders/${id}`, this.httpOptions)
-  }
-
-  saveOrder(order: Order): Observable<any> {
-    return this._http.post<Order>(`${this.API_URI}/orders`, order, this.httpOptions)
-  }
-
-  updateOrder(order: Order): Observable<any> {
-    return this._http.put<Order>(`${this.API_URI}/orders/${order._id}`, order, this.httpOptions)
-  }
-
-  deleteOrder(order: Order): Observable<any> {
-    return this._http.delete<Order>(`${this.API_URI}/orders/${order._id}`, this.httpOptions)
-  }
-
-}
-...
-```
-
-### Components
-
-```ts
-...
+@Component({
+  selector: 'app-order',
+  templateUrl: './order.component.html',
+  styleUrls: ['./order.component.scss'],
+})
 export class OrderComponent implements OnInit {
   formOrder: FormGroup;
 
@@ -178,7 +56,8 @@ export class OrderComponent implements OnInit {
   }
 
   putPrice() {
-    let data = this.formOrder.value.product.split('-'); 
+    let data = this.formOrder.value.product.split('-');    
+    //this.formOrder.value.price = data[1]; 
     this.formOrder.patchValue({
       price: data[1]
     })   
@@ -224,10 +103,10 @@ export class OrderComponent implements OnInit {
       });
     }
 
-    
-    this.formOrder.patchValue({
-      total: this.formOrder.value.total + (this.formOrder.value.qty * this.formOrder.value.price)
-    })  
+    //this.formOrder.value.total += Number(this.formOrder.value.qty) * this.formOrder.value.price
+      this.formOrder.patchValue({
+        total: this.formOrder.value.total + (this.formOrder.value.qty * this.formOrder.value.price)
+      })  
   }
 
   orderList() {
@@ -313,31 +192,3 @@ export class OrderComponent implements OnInit {
   }
   
 }
-...
-```
-
-### Models 
-```ts
-...
-export class Order {
-  _id: number | string;
-  client: Client;
-  product: Product;
-  price: number;
-  qty: number;
-  serial: number | string;
-  total: number;
-  orderItems: [];
-}
-
-...
-```
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/DanielArturoAlejoAlvarez/ecommerce-angular-app. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-````
